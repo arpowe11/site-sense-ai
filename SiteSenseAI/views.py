@@ -12,10 +12,9 @@ def chatbot_response(request):
         question = request.POST.get('message')
 
         # Here you would implement your chatbot logic
-        # For simplicity, we'll just echo the user's message
         site_sense: SiteSense = SiteSense(model="gpt-3.5-turbo", temp=0.4)  # NOQA
         prompt = site_sense.create_response(question=question)
         response = site_sense.stream_response(prompt)
         # response_message = f"\n\nYou said: {response}"
 
-        return JsonResponse({'message': "\n" + response})
+        return JsonResponse({'message': response})
