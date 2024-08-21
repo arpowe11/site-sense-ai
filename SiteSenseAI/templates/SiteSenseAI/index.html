@@ -57,7 +57,7 @@
                     success: function(data) {
                         const botMessage = document.createElement('div');
                         botMessage.className = 'bot-message message';
-                        botMessage.textContent = data.message;
+                        botMessage.innerHTML = data.message;  // Use innerHTML to allow for clickable links
                         chatBox.appendChild(botMessage);
                         chatBox.scrollTop = chatBox.scrollHeight;
                     }
