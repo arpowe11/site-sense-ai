@@ -3,78 +3,70 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta content="IE=edge" http-equiv="X-UA-Compatible">
-  <meta content="width=device-width,initial-scale=1" name="viewport">
-  <meta content="description" name="description">
-  <meta name="google" content="notranslate" />
-  <meta content="Mashup templates have been developped by Orson.io team" name="author">
-
-  <!-- Disable tap highlight on IE -->
-  <meta name="msapplication-tap-highlight" content="no">
-
-  <link rel="apple-touch-icon" sizes="180x180" href="{% static 'SiteSenseAI/assets/apple-icon-180x180.png' %}">
-  <link href="{% static 'SiteSenseAI/assets/favicon.ico' %}" rel="icon">
-
-  <title>Title page</title>  
-
-<link href="{% static 'SiteSenseAI/main.3f6952e4.css' %}" rel="stylesheet"></head>
-
-<body class="minimal">
-<div id="site-border-left"></div>
-<div id="site-border-right"></div>
-<div id="site-border-top"></div>
-<div id="site-border-bottom"></div>
-<!-- Add your content of header -->
-<header>
-  <nav class="navbar  navbar-fixed-top navbar-inverse">
-    <div class="container">
-        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse" aria-expanded="false">
-          <span class="sr-only">Toggle navigation</span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-        </button>
-
-      <div class="collapse navbar-collapse" id="navbar-collapse">
-        <ul class="nav navbar-nav ">
-          <li><a href="/home" title="">01 : Home</a></li>
-          <li><a href="/chatbot" title="">02 : Chatbot</a></li>
-        </ul>
-
-      </div> 
-    </div>
-  </nav>
-</header>
-<!-- Add your site or app content here -->
-  <div class="hero-full-container background-image-container white-text-container" style="background-image: url({% static 'SiteSenseAI/assets/images/space.jpg' %})">
-    <div class="container">
-      <div class="row">
-        <div class="col-xs-12">
-          <div class="hero-full-wrapper">
-            <div class="text-content">
-              <h1>Hello,<br>
-                <span id="typed-strings">
-                  <span>Welcome to SiteSenseAI</span>
-                  <span>Here to help guide you with your website needs</span>
-                </span>
-                <span id="typed"></span>
-              </h1>
-            </div>
-          </div>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SiteSenseAI</title>
+    <link rel="stylesheet" href="{% static 'SiteSenseAI/styles.css' %}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <div class="chat-container">
+        <div class="chat-header">
+            <h2>Site Sense AI</h2>
         </div>
-      </div>
+        <div class="chat-box" id="chat-box">
+            <!-- Chat messages will be displayed here -->
+        </div>
+        <div class="chat-input-area">
+            <input type="text" id="chat-input" placeholder="Type your message...">
+            <button id="send-btn">Send</button>
+        </div>
     </div>
-  </div>
 
-<script>
-  document.addEventListener("DOMContentLoaded", function (event) {
-     type();
-     movingBackgroundImage();
-  });
-</script>
+    <script>
+        document.getElementById('send-btn').addEventListener('click', function() {
+            sendMessage();
+        });
 
+        document.getElementById('chat-input').addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                sendMessage();
+            }
+        });
 
-<script type="text/javascript" src="{% static 'SiteSenseAI/main.70a66962.js' %}"></script></body>
+        function sendMessage() {
+            const chatBox = document.getElementById('chat-box');
+            const inputField = document.getElementById('chat-input');
+            const message = inputField.value.trim();
 
+            if (message) {
+                const userMessage = document.createElement('div');
+                userMessage.className = 'user-message message';
+                userMessage.textContent = message;
+                chatBox.appendChild(userMessage);
+
+                // Send the message to the server
+                $.ajax({
+                    url: "{% url 'chatbot_response' %}",
+                    type: "POST",
+                    data: {
+                        'message': message,
+                        'csrfmiddlewaretoken': '{{ csrf_token }}'
+                    },
+                    success: function(data) {
+                        const botMessage = document.createElement('div');
+                        botMessage.className = 'bot-message message';
+                        botMessage.textContent = data.message;
+                        chatBox.appendChild(botMessage);
+                        chatBox.scrollTop = chatBox.scrollHeight;
+                    }
+                });
+
+                inputField.value = '';
+                chatBox.scrollTop = chatBox.scrollHeight;
+            }
+        }
+    </script>
+</body>
 </html>
