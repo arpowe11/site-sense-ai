@@ -17,8 +17,6 @@ def chatbot_response(request):
 
         # Here you would implement your chatbot logic
         site_sense: SiteSense = SiteSense(model="gpt-3.5-turbo", temp=0.4)  # NOQA
-        prompt = site_sense.create_response(question=question)
-        response = site_sense.stream_response(prompt)
-        # response_message = f"\n\nYou said: {response}"
+        response = site_sense.chat_bot(question)
 
-        return JsonResponse({'message': response})
+        return JsonResponse({'message': response["response"]})

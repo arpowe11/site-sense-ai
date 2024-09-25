@@ -31,7 +31,6 @@ If asked how to contact 'Sun Sign Designs' tell the client to go here: <a href="
 
 Answer any question the client has only if the question is related to hosting, domain names, or creating a website.
 
-Questions: {q}
-
-Use this chat history only if it is related to what the client says otherwise use the information above:
 {history}
+
+Questions: {input}
