@@ -16,7 +16,7 @@ dataclasses-json
 debugpy
 decorator
 distro
-Django
+Django~=5.1
 docx2txt
 duckduckgo_search
 executing
@@ -35,11 +35,11 @@ jsonpatch
 jsonpointer
 jupyter_client
 jupyter_core
-langchain
+langchain~=0.2.14
 langchain-community
 langchain-core
 langchain-experimental
-langchain-openai
+langchain-openai~=0.1.22
 langchain-text-splitters
 langchainhub
 langsmith
@@ -71,7 +71,7 @@ Pygments
 pypdf
 pyreqwest_impersonate
 python-dateutil
-python-dotenv
+python-dotenv~=1.0.1
 pytz
 PyYAML
 pyzmq
@@ -98,3 +98,5 @@ wcwidth
 whitenoise
 wikipedia
 yarl
+
+python-whois~=0.9.4
