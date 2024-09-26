@@ -1,115 +1,24 @@
-{% load static %}
-
+<!-- my_template.html -->
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <meta content="IE=edge" http-equiv="X-UA-Compatible">
-  <meta content="width=device-width,initial-scale=1" name="viewport">
-  <meta content="description" name="description">
-  <meta name="google" content="notranslate" />
-  <meta content="Mashup templates have been developped by Orson.io team" name="author">
+    <title>My Django Form</title>
+</head>
+<body>
+    <h1>SiteSenseAI</h1>
 
-  <!-- Disable tap highlight on IE -->
-  <meta name="msapplication-tap-highlight" content="no">
-  
-  <link rel="stylesheet" href="{% static 'SiteSenseAI/styles.css' %}">
-  <link rel="apple-touch-icon" sizes="180x180" href="{% static 'SiteSenseAI/assets/apple-icon-180x180.png' %}">
-  <link href="{% static 'SiteSenseAI/assets/favicon.ico' %}" rel="icon">
+    <!-- Form: sends a POST request to the same URL -->
+    <form method="POST">
+        {% csrf_token %} <!-- Required for security -->
+        <label for="question">Enter Question:</label>
+        <input type="text" id="question" name="question" required>
+        <button type="submit">Submit</button>
+    </form>
 
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-  <title>SiteSenseAI</title>
-
-<link href="{% static 'SiteSenseAI/main.3f6952e4.css' %}" rel="stylesheet"></head>
-
-<body class="minimal">
-<div id="site-border-left"></div>
-<div id="site-border-right"></div>
-<div id="site-border-top"></div>
-<div id="site-border-bottom"></div>
-
-<!-- Add your content of header -->
-<header>
-  {% comment %} <nav class="navbar  navbar-fixed-top navbar-inverse">
-    <div class="container">
-        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse" aria-expanded="false">
-          <span class="sr-only">Toggle navigation</span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-        </button>
-
-      <div class="collapse navbar-collapse" id="navbar-collapse">
-        <ul class="nav navbar-nav ">
-          <li><a href="/home" title="">01 : Home</a></li>
-          <li><a href="/chatbot" title="">02 : Chatbot</a></li>
-        </ul>
-
-      </div> 
-    </div>
-  </nav> {% endcomment %}
-</header>
-
-
-    <div class="chat-container">
-        <div class="chat-header">
-            <h2>Site Sense AI</h2>
-        </div>
-        <div class="chat-box" id="chat-box">
-            <!-- Chat messages will be displayed here -->
-        </div>
-        <div class="chat-input-area">
-            <input type="text" id="chat-input" placeholder="Type your message...">
-            <button id="send-btn">Send</button>
-        </div>
-
-
-
-    <script>
-        document.getElementById('send-btn').addEventListener('click', function() {
-            sendMessage();
-        });
-
-        document.getElementById('chat-input').addEventListener('keypress', function(event) {
-            if (event.key === 'Enter') {
-                event.preventDefault();
-                sendMessage();
-            }
-        });
-
-        function sendMessage() {
-            const chatBox = document.getElementById('chat-box');
-            const inputField = document.getElementById('chat-input');
-            const message = inputField.value.trim();
-
-            if (message) {
-                const userMessage = document.createElement('div');
-                userMessage.className = 'user-message message';
-                userMessage.textContent = message;
-                chatBox.appendChild(userMessage);
-
-                // Send the message to the server
-                $.ajax({
-                    url: "{% url 'chatbot_response' %}",
-                    type: "POST",
-                    data: {
-                        'message': message,
-                        'csrfmiddlewaretoken': '{{ csrf_token }}'
-                    },
-                    success: function(data) {
-                        const botMessage = document.createElement('div');
-                        botMessage.className = 'bot-message message';
-                        botMessage.innerHTML = data.message;  // Use innerHTML to allow for clickable links
-                        chatBox.appendChild(botMessage);
-                        chatBox.scrollTop = chatBox.scrollHeight;
-                    }
-                });
-
-                inputField.value = '';
-                chatBox.scrollTop = chatBox.scrollHeight;
-            }
-        }
-    </script>
+    <!-- Display the result if it exists -->
+    {% if response %}
+        <h2>Emily:</h2>
+        <p>{{ response }}</p>
+    {% endif %}
 </body>
 </html>
