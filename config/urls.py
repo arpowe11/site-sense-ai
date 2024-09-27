@@ -25,5 +25,5 @@ urlpatterns = [
     # path('home/', index),
     path('', chatbot),
     # path('chatbot/', chatbot),
-    path('chatbot/response/', chatbot_response, name='chatbot_response')
+    path('chatbot/', chatbot_response, name='chatbot_response')
 ]

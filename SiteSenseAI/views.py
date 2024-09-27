@@ -12,11 +12,16 @@ def chatbot(request) -> HttpResponse:
 
 
 def chatbot_response(request):
+    memory_data = request.session.get('conversation_memory', None)
+    site_sense: SiteSense = SiteSense(model="gpt-3.5-turbo", temp=0.7, memory_data=memory_data)
+
     if request.method == 'POST':
-        question = request.POST.get('message')
+        question = request.POST.get('question')
 
-        # Here you would implement your chatbot logic
-        site_sense: SiteSense = SiteSense(model="gpt-3.5-turbo", temp=0.4)  # NOQA
         response = site_sense.chat_bot(question)
+        result = response
+        request.session['conversation_memory'] = site_sense.get_memory_data()
 
-        return JsonResponse({'message': response["response"]})
+
+        return render(request, 'SiteSenseAI/chatbot.html', {'response': result})
+    return render(request, 'SiteSenseAI/chatbot.html', {})
