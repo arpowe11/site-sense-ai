@@ -1,60 +1,44 @@
-<!-- 
-Implement this template for v1.2 of SiteSense AI
-
-This template will be used to update the UI of the AI
-to make it more visualy appealing to the user
--->
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chatbot Interface</title>
-    <!-- Tailwind CSS CDN -->
+    <title>AI Chat</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <style>
-        /* Custom scrollbar styling */
-        .custom-scrollbar::-webkit-scrollbar {
-            width: 8px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb {
-            background-color: #a0aec0;
-            border-radius: 4px;
-        }
-    </style>
 </head>
-<body class="bg-gray-100 flex justify-center items-center min-h-screen">
-    <div class="bg-white w-full max-w-3xl rounded-lg shadow-lg flex flex-col h-[80vh]">
-        <!-- Chat Header -->
-        <div class="bg-gray-800 text-white p-4 rounded-t-lg">
-            <h1 class="text-xl font-bold">Chatbot Interface</h1>
+<body class="bg-gray-100 h-screen flex flex-col justify-between">
+
+    <!-- Chat Header -->
+    <header class="bg-blue-600 text-white p-4 text-center font-bold">
+        AI Chat
+    </header>
+
+    <!-- Chat Window -->
+    <div class="flex-1 overflow-y-auto p-4 space-y-4">
+        <!-- Displaying User Message -->
+        <div class="flex justify-end">
+            <div class="bg-blue-500 text-white rounded-lg px-4 py-2 max-w-xs w-auto shadow">
+               {{ question }}
+            </div>
         </div>
 
-        <!-- Chat Area -->
-        <div id="chatArea" class="flex-1 p-4 overflow-y-auto custom-scrollbar">
-            <!-- Chat messages will go here -->
-            {% for message in messages %}
-                <div class="{% if message.user == 'bot' %}bg-gray-300{% else %}bg-blue-500 text-white{% endif %} rounded-lg p-3 my-2 w-fit max-w-xs {% if message.user == 'user' %}ml-auto{% endif %}">
-                    {{ message.text }}
-                </div>
-            {% endfor %}
-        </div>
-
-        <!-- Message Input -->
-        <div class="p-4 bg-gray-200 rounded-b-lg">
-            <form method="POST" action="{% url 'chat' %}" class="flex">
-                {% csrf_token %}
-                <input type="text" name="message" placeholder="Type your message..." class="flex-1 px-4 py-2 border border-gray-300 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
-                <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-r-lg hover:bg-blue-600 focus:outline-none">Send</button>
-            </form>
+        <!-- Displaying AI Response -->
+        <div class="flex justify-start">
+            <div class="bg-gray-200 text-gray-900 rounded-lg px-4 py-2 max-w-xs w-auto shadow">
+                {{ response }}
+            </div>
         </div>
     </div>
 
-    <!-- Optional: JavaScript for auto-scrolling -->
-    <script>
-        const chatArea = document.getElementById('chatArea');
-        chatArea.scrollTop = chatArea.scrollHeight;
-    </script>
+    <!-- Message Input Area -->
+    <form method="POST" class="flex items-center bg-white border-t border-gray-300 p-4">
+        {% csrf_token %}
+        <input type="text" id="question" name="question" placeholder="Type a message..."
+               class="flex-1 border border-gray-300 rounded-lg p-2 focus:outline-none focus:border-blue-500" required>
+        <button type="submit" class="ml-4 bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600">
+            Send
+        </button>
+    </form>
+
 </body>
 </html>

@@ -22,6 +22,10 @@ def chatbot_response(request):
         result = response
         request.session['conversation_memory'] = site_sense.get_memory_data()
 
+        context: dict = {
+            'response': result,
+            'question': question
+        }
 
-        return render(request, 'SiteSenseAI/chatbot.html', {'response': result})
+        return render(request, 'SiteSenseAI/chatbot.html', context)
     return render(request, 'SiteSenseAI/chatbot.html', {})
