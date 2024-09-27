@@ -1,0 +1,60 @@
+<!-- 
+Implement this template for v1.2 of SiteSense AI
+
+This template will be used to update the UI of the AI
+to make it more visualy appealing to the user
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chatbot Interface</title>
+    <!-- Tailwind CSS CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        /* Custom scrollbar styling */
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 8px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background-color: #a0aec0;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 flex justify-center items-center min-h-screen">
+    <div class="bg-white w-full max-w-3xl rounded-lg shadow-lg flex flex-col h-[80vh]">
+        <!-- Chat Header -->
+        <div class="bg-gray-800 text-white p-4 rounded-t-lg">
+            <h1 class="text-xl font-bold">Chatbot Interface</h1>
+        </div>
+
+        <!-- Chat Area -->
+        <div id="chatArea" class="flex-1 p-4 overflow-y-auto custom-scrollbar">
+            <!-- Chat messages will go here -->
+            {% for message in messages %}
+                <div class="{% if message.user == 'bot' %}bg-gray-300{% else %}bg-blue-500 text-white{% endif %} rounded-lg p-3 my-2 w-fit max-w-xs {% if message.user == 'user' %}ml-auto{% endif %}">
+                    {{ message.text }}
+                </div>
+            {% endfor %}
+        </div>
+
+        <!-- Message Input -->
+        <div class="p-4 bg-gray-200 rounded-b-lg">
+            <form method="POST" action="{% url 'chat' %}" class="flex">
+                {% csrf_token %}
+                <input type="text" name="message" placeholder="Type your message..." class="flex-1 px-4 py-2 border border-gray-300 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-r-lg hover:bg-blue-600 focus:outline-none">Send</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Optional: JavaScript for auto-scrolling -->
+    <script>
+        const chatArea = document.getElementById('chatArea');
+        chatArea.scrollTop = chatArea.scrollHeight;
+    </script>
+</body>
+</html>
