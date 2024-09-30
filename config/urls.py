@@ -22,5 +22,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', home, name='home'),
     path('emily_ai/', emily_ai),
-    path('wp_emily_ai', wp_emily_chat)
+    path('wp_emily_ai/', wp_emily_chat)
 ]

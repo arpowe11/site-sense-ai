@@ -12,7 +12,7 @@ def home(request) -> HttpResponse:
 
 
 def emily_ai(request) -> HttpResponse:
-    chat_memory = request.session.get('conversation_memory', [])
+    chat_memory = request.session.get('conversation_memory', [])  # NOQA
     site_sense: SiteSense = SiteSense(model="gpt-3.5-turbo", temp=0.7, memory_data=chat_memory)
 
     if request.method == "POST":
@@ -44,12 +44,6 @@ def wp_emily_chat(request) -> HttpResponse:
         question = request.POST.get("question")
         response = site_sense.get_response(question)
         request.session['conversation_memory'] = site_sense.update_memory(question, response)
-
-        # context: dict = {
-        #     "question": question,
-        #     "response": response.replace("Emily:", ""),
-        #     "chat_history": chat_memory,
-        # }
 
         context: dict = {
             "response": response.replace("Emily:", ""),
