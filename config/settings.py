@@ -59,7 +59,7 @@ MIDDLEWARE = [
 def add_csp_headers(get_response):
     def middleware(request):
         response = get_response(request)
-        response['Content-Security-Policy'] = "frame-ancestors 'self' https://sunsigndesigns.com/SiteSenseAI;"
+        response['Content-Security-Policy'] = "frame-ancestors 'self' https://sunsigndesigns.com/site-sense-ai;"
         return response
 
     return middleware
