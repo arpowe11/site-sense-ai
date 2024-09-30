@@ -38,6 +38,9 @@ INSTALLED_APPS = [
 
     # Local imports
     'SiteSenseAI',
+
+    # Third party imports
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
@@ -46,7 +49,7 @@ MIDDLEWARE = [
     # Added for static files, get rid of spaces and comment
     'whitenoise.middleware.WhiteNoiseMiddleware',
 
-    # Added to attempt to allow this web app to be access via iframe
+    # Trying to integrate into wordpress
     'corsheaders.middleware.CorsMiddleware',
 
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -128,9 +131,8 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-
-# Try to allow iframe access
+# Used for API purposes
 
 CORS_ALLOWED_ORIGINS = [
-    "https://allowed-domain.com",
+    "https://sunsigndesigns.com",
 ]
