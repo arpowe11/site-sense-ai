@@ -1,5 +1,6 @@
 from django.http import JsonResponse
 from django.shortcuts import render, HttpResponse
+from django.views.decorators.clickjacking import xframe_options_exempt
 from site_sense_lib.lib.site_sense import SiteSense
 
 
@@ -8,6 +9,7 @@ def home(request) -> HttpResponse:
     return render(request, "SiteSenseAI/index.html", {})
 
 
+@xframe_options_exempt
 def emily_ai(request) -> HttpResponse:
     chat_memory = request.session.get('conversation_memory', [])
     site_sense: SiteSense = SiteSense(model="gpt-3.5-turbo", temp=0.7, memory_data=chat_memory)
