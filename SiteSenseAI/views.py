@@ -5,11 +5,11 @@ from site_sense_lib.lib.site_sense import SiteSense
 
 # Create your views here.
 def home(request) -> HttpResponse:
-    return render(request, "EmilyAI/index.html", {})
+    return render(request, "SiteSenseAI/index.html", {})
 
 
 def emily_ai(request) -> HttpResponse:
-    chat_memory = request.session.get('conversation_memory', None)
+    chat_memory = request.session.get('conversation_memory', [])
     site_sense: SiteSense = SiteSense(model="gpt-3.5-turbo", temp=0.7, memory_data=chat_memory)
 
     if request.method == "POST":
@@ -24,8 +24,8 @@ def emily_ai(request) -> HttpResponse:
         # }
 
         context: dict = {
-            "response": response,
+            "response": response.replace("Emily:", ""),
         }
 
         return JsonResponse(context)
-    return render(request, "EmilyAI/emily_ai.html", {})
+    return render(request, "SiteSenseAI/emily_ai.html", {})

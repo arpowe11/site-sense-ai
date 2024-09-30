@@ -1,4 +1,4 @@
-{% extends 'EmilyAI/base.html' %}
+{% extends 'SiteSenseAI/base.html' %}
 
 {% block title %}Site Sense AI{% endblock %}
 
@@ -65,25 +65,22 @@
         bubbleDiv.classList.add('flex', 'mb-4');
 
         // Align to the right if it's the user, left if it's the AI
-        if (type === 'user') {
-            bubbleDiv.classList.add('justify-end');
-        } else {
-            bubbleDiv.classList.add('justify-start');
-        }
+        bubbleDiv.classList.toggle('justify-end', type === 'user');
+        bubbleDiv.classList.toggle('justify-start', type !== 'user');
 
         // Create the bubble itself
         let bubble = document.createElement('p');
         bubble.classList.add('p-3', 'rounded-lg', 'shadow-md', 'max-w-lg');
         if (type === 'user') {
-            bubble.classList.add('bg-blue-500', 'text-white');
+            bubble.classList.add('bg-blue-500', 'text-white');  // Set text color to white for user messages
         } else {
-            bubble.classList.add('bg-gray-200', 'text-gray-800');
+            bubble.classList.add('bg-gray-200', 'text-gray-800');  // Set text color to dark for AI messages
         }
 
         // Make links clickable using a regex to detect URLs
         let urlPattern = /(https?:\/\/[^\s]+)/g;
         text = text.replace(urlPattern, function(url) {
-            return '<a href="' + url + '" target="_blank" class="text-blue-500 hover:underline">' + url + '</a>';
+            return `<a href="${url}" target="_blank" class="text-blue-500 hover:underline">${url}</a>`;
         });
 
         // Insert the text with clickable links
@@ -106,5 +103,7 @@
         padding-bottom: 80px; /* Add padding so the last message doesn't get hidden */
     }
 </style>
+
+
 
 {% endblock %}
