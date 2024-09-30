@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Site Sense AI{% endblock %}</title>
+    <!-- Link to Tailwind CSS (add this in your base HTML if not already included) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="min-h-screen flex flex-col bg-gray-50 text-gray-900">
+
+    <!-- Header -->
+    <header class="bg-blue-600 text-white py-4 shadow-md">
+        <div class="container mx-auto flex justify-between items-center px-4">
+            <h1 class="text-2xl font-semibold">Site Sense AI</h1>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto flex-grow py-8 px-4">
+        {% block content %}
+        <!-- Default content goes here if not overridden -->
+        {% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-gray-400 py-4">
+        <div class="container mx-auto text-center">
+            <p>&copy; 2024 SiteSenseAI. All rights reserved.</p>
+        </div>
+    </footer>
+
+</body>
+</html>

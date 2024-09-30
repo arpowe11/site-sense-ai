@@ -16,10 +16,11 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from SiteSenseAI.views import home, emily_ai
+from SiteSenseAI.views import home, emily_ai, wp_emily_chat
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', home, name='home'),
     path('emily_ai/', emily_ai),
+    path('wp_emily_ai', wp_emily_chat)
 ]

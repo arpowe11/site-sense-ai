@@ -1,0 +1,109 @@
+{% extends 'SiteSenseAI/wp_base.html' %}
+
+{% block title %}Site Sense AI{% endblock %}
+
+{% block content %}
+
+<div class="container mx-auto py-8 px-4 h-screen flex flex-col">
+    <!-- Chat Section (scrollable) -->
+    <div id="chat-container" class="flex-grow overflow-y-auto space-y-6 p-4 border rounded-lg">
+        <!-- Existing conversation will be appended here dynamically -->
+    </div>
+
+    <!-- Form Section (fixed at the bottom) -->
+    <form id="chatForm" class="bg-white shadow-lg rounded-lg p-6 w-full">
+        {% csrf_token %}
+        <div class="mb-4">
+            <label for="question" class="block text-gray-700 font-medium mb-2">Enter Question Here:</label>
+            <input type="text" id="questionInput" name="question"
+                   required
+                   class="w-full border border-gray-300 rounded-lg py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200"
+                   placeholder="Type your question here...">
+        </div>
+        <button type="submit" class="w-full bg-blue-600 text-white font-semibold py-2 rounded-lg hover:bg-blue-500 transition duration-200">
+            Submit
+        </button>
+    </form>
+</div>
+
+<script>
+    document.getElementById('chatForm').addEventListener('submit', function(e) {
+        e.preventDefault();  // Prevent the form from submitting the normal way
+
+        // Get the user's question
+        let question = document.getElementById('questionInput').value;
+
+        // Add the user's question as a chat bubble
+        addChatBubble(question, 'user');
+
+        // Send the question to the server via AJAX
+        let formData = new FormData(this);  // This collects the form data (including CSRF token)
+        fetch('', {  // '' = the current URL
+            method: 'POST',
+            body: formData,
+        })
+        .then(response => response.json())  // Assuming the server responds with JSON
+        .then(data => {
+            // Add the AI's response as a chat bubble
+            let aiResponse = data.response;  // The response should come back as JSON { "response": "AI's response" }
+            addChatBubble(aiResponse, 'ai');
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+
+        // Clear the input field
+        document.getElementById('questionInput').value = '';
+    });
+
+    // Function to add a chat bubble
+    function addChatBubble(text, type) {
+        let chatContainer = document.getElementById('chat-container');
+
+        // Create a new div for the chat bubble
+        let bubbleDiv = document.createElement('div');
+        bubbleDiv.classList.add('flex', 'mb-4');
+
+        // Align to the right if it's the user, left if it's the AI
+        bubbleDiv.classList.toggle('justify-end', type === 'user');
+        bubbleDiv.classList.toggle('justify-start', type !== 'user');
+
+        // Create the bubble itself
+        let bubble = document.createElement('p');
+        bubble.classList.add('p-3', 'rounded-lg', 'shadow-md', 'max-w-lg');
+        if (type === 'user') {
+            bubble.classList.add('bg-blue-500', 'text-white');  // Set text color to white for user messages
+        } else {
+            bubble.classList.add('bg-gray-200', 'text-gray-800');  // Set text color to dark for AI messages
+        }
+
+        // Make links clickable using a regex to detect URLs
+        let urlPattern = /(https?:\/\/[^\s]+)/g;
+        text = text.replace(urlPattern, function(url) {
+            return `<a href="${url}" target="_blank" class="text-blue-500 hover:underline">${url}</a>`;
+        });
+
+        // Insert the text with clickable links
+        bubble.innerHTML = text;
+
+        // Append the bubble to the div and the div to the chat container
+        bubbleDiv.appendChild(bubble);
+        chatContainer.appendChild(bubbleDiv);
+
+        // Scroll to the bottom of the chat
+        chatContainer.scrollTop = chatContainer.scrollHeight;
+    }
+</script>
+
+<style>
+    /* Styling to ensure only the chat container scrolls */
+    #chat-container {
+        height: 70vh; /* Set a fixed height for the chat container */
+        overflow-y: auto; /* Allow scrolling only within the chat container */
+        padding-bottom: 80px; /* Add padding so the last message doesn't get hidden */
+    }
+</style>
+
+
+
+{% endblock %}
