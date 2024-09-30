@@ -46,6 +46,9 @@ MIDDLEWARE = [
     # Added for static files, get rid of spaces and comment
     'whitenoise.middleware.WhiteNoiseMiddleware',
 
+    # Added to attempt to allow this web app to be access via iframe
+    'corsheaders.middleware.CorsMiddleware',
+
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -53,19 +56,6 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
-
-
-# Add custom middleware to set Content Security Policy
-def add_csp_headers(get_response):
-    def middleware(request):
-        response = get_response(request)
-        response['Content-Security-Policy'] = "frame-ancestors 'self' https://sunsigndesigns.com/site-sense-ai;"
-        return response
-
-    return middleware
-
-MIDDLEWARE.insert(1, add_csp_headers)  # Insert your middleware after SecurityMiddleware
-
 
 ROOT_URLCONF = 'config.urls'
 
@@ -137,3 +127,10 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+# Try to allow iframe access
+
+CORS_ALLOWED_ORIGINS = [
+    "https://allowed-domain.com",
+]
