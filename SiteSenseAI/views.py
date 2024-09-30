@@ -3,29 +3,29 @@ from django.shortcuts import render, HttpResponse
 from site_sense_lib.lib.site_sense import SiteSense
 
 
-def index(request) -> HttpResponse:
-    return render(request, 'SiteSenseAI/index.html', {})
+# Create your views here.
+def home(request) -> HttpResponse:
+    return render(request, "EmilyAI/index.html", {})
 
 
-def chatbot(request) -> HttpResponse:
-    return render(request, 'SiteSenseAI/chatbot.html', {})
+def emily_ai(request) -> HttpResponse:
+    chat_memory = request.session.get('conversation_memory', None)
+    site_sense: SiteSense = SiteSense(model="gpt-3.5-turbo", temp=0.7, memory_data=chat_memory)
 
+    if request.method == "POST":
+        question = request.POST.get("question")
+        response = site_sense.get_response(question)
+        request.session['conversation_memory'] = site_sense.update_memory(question, response)
 
-def chatbot_response(request):
-    memory_data = request.session.get('conversation_memory', None)
-    site_sense: SiteSense = SiteSense(model="gpt-3.5-turbo", temp=0.7, memory_data=memory_data)
-
-    if request.method == 'POST':
-        question = request.POST.get('question')
-
-        response = site_sense.chat_bot(question)
-        result = response
-        request.session['conversation_memory'] = site_sense.get_memory_data()
+        # context: dict = {
+        #     "question": question,
+        #     "response": response.replace("Emily:", ""),
+        #     "chat_history": chat_memory,
+        # }
 
         context: dict = {
-            'response': result,
-            'question': question
+            "response": response,
         }
 
-        return render(request, 'SiteSenseAI/chatbot.html', context)
-    return render(request, 'SiteSenseAI/chatbot.html', {})
+        return JsonResponse(context)
+    return render(request, "EmilyAI/emily_ai.html", {})

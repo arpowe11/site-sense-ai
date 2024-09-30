@@ -1,81 +1,50 @@
 import os
-
 from dotenv import load_dotenv, find_dotenv
 from langchain_openai import ChatOpenAI
 from langchain.prompts import PromptTemplate
-from langchain.chains import ConversationChain
-from langchain.memory import ConversationBufferMemory
-from langchain.schema import HumanMessage, AIMessage
-from site_sense_lib.lib.whois_search import whois_lookup
 
 
 class SiteSense:
+    # Load environment variables from .env file
     load_dotenv(find_dotenv(), override=True)
 
     def __init__(self, *, model: str = "", temp: float = 0.5, memory_data=None) -> None:
-        self.llm = ChatOpenAI(model=model, temperature=temp)  # Initialize the LLM
-        self.domains: list = [".com", ".org", ".edu", ".gov", ".mil", ".net", ".info", ".tech", ".design", ".app"]
-        self.memory = ConversationBufferMemory(memory_key="history", return_messages=True)
-        if memory_data:
-            # Load memory data, converting from the serialized format
-            self.memory.chat_memory.messages = self.deserialize_messages(memory_data)
+        self.llm: ChatOpenAI = ChatOpenAI(model=model, temperature=temp)
+        self.chat_history: list = memory_data
 
-    def generate_prompt(self) -> PromptTemplate:
-        with open(os.environ["TEMPLATE_PATH"], 'r') as t:
-            template = t.read()
+    def get_prompt(self, usr_inp: str) -> str:
+        """
+        Opens the template and returns the prompt so the AI can
+        generate the response based on the prompt.
 
-        # Define a prompt template
+        :param usr_inp: User input string
+        :return: Formatted prompt string
+        """
+        with open(os.environ["TEMPLATE"], 'r') as text_file:
+            template = text_file.read()
+
+        # Combine chat memory into a single string
+        memory_context = "\n".join(self.chat_history)
+
+        # Update the template to include memory context
         prompt_template = PromptTemplate(
-            input_variables=["history", "input"],
+            input_variables=["memory_context", "user_input"],
             template=template
         )
 
-        return prompt_template
+        return prompt_template.format(memory_context=memory_context, user_input=usr_inp)
 
-    def chat_bot(self, user_input="") -> ConversationChain:
-        # check for domain names manually, not with the AI for more accurate searches
-        for domain in self.domains:
-            if domain in user_input.lower():
-                return whois_lookup(user_input)
+    # Function to get a response from the chatbot
+    def get_response(self, user_input) -> str:
+        prompt = self.get_prompt(user_input)
+        response = self.llm.invoke(prompt)
+        return response.content
 
-        chatbot = ConversationChain(
-            llm=self.llm,
-            memory=self.memory,
-            prompt=self.generate_prompt(),
-        )
+    def update_memory(self, prompt, response) -> list:
+        self.chat_history.append(f"Human: {prompt}")
+        self.chat_history.append(f"Emily: {response}")
 
-        # Generate response
-        response = chatbot({"input": user_input})
-        parsed_text = self.parse_text(response["response"])
+        if len(self.chat_history) > 10:
+            self.chat_history.pop(0)
 
-        return parsed_text
-
-    def parse_text(self, text: str) -> str:
-        return text.replace("AIMessage(content='", "").replace("')", "")
-
-    def get_memory_data(self):
-        """Returns the current state of the memory to be stored in the session in a serializable format"""
-        return self.serialize_messages(self.memory.chat_memory.messages)
-
-    def reset_memory_data(self):
-        self.memory = ConversationBufferMemory(memory_key="history", return_messages=True)
-
-    def serialize_messages(self, messages):
-        """Converts HumanMessage, AIMessage objects into a serializable format"""
-        serialized = []
-        for msg in messages:
-            if isinstance(msg, HumanMessage):
-                serialized.append({"type": "human", "content": msg.content})
-            elif isinstance(msg, AIMessage):
-                serialized.append({"type": "ai", "content": msg.content})
-        return serialized
-
-    def deserialize_messages(self, serialized_messages):
-        """Converts serialized messages back into HumanMessage and AIMessage objects"""
-        deserialized = []
-        for msg in serialized_messages:
-            if msg["type"] == "human":
-                deserialized.append(HumanMessage(content=msg["content"]))
-            elif msg["type"] == "ai":
-                deserialized.append(AIMessage(content=msg["content"]))
-        return deserialized
+        return self.chat_history

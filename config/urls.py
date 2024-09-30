@@ -16,14 +16,10 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from SiteSenseAI.views import index, chatbot, chatbot_response
-
+from SiteSenseAI.views import home, emily_ai
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    # path('/', index),
-    # path('home/', index),
-    path('', chatbot),
-    # path('chatbot/', chatbot),
-    path('chatbot/', chatbot_response, name='chatbot_response')
+    path('', home, name='home'),
+    path('emily_ai/', emily_ai),
 ]

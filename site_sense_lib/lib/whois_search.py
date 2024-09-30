@@ -16,10 +16,21 @@ def whois_lookup(text: str) -> str:
     if domain is None:
         return "No valid domain found in the input."
 
-
     try:
         w = whois.whois(domain)
         if w.status is not None:
             return f"The domain {domain} is already registered."
-    except Exception:
+    except Exception:  # NOQA
         return f"The domain {domain} is Available!"
+
+
+
+if __name__ == '__main__':
+    user_input = input("You: ")
+
+    for domain in [".com", ".net", ".edu"]:
+        if domain in user_input.lower():
+            results = whois_lookup(user_input)
+            response = f"Results: {results}"
+
+    print(response)
