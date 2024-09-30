@@ -20,7 +20,7 @@ class SiteSense:
         :param usr_inp: User input string
         :return: Formatted prompt string
         """
-        with open(os.environ["TEMPLATE"], 'r') as text_file:
+        with open(os.environ["TEMPLATE_PATH"], 'r') as text_file:
             template = text_file.read()
 
         # Combine chat memory into a single string
