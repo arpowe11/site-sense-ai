@@ -6,15 +6,22 @@
     <title>{% block title %}Site Sense AI{% endblock %}</title>
     <!-- Link to Tailwind CSS (add this in your base HTML if not already included) -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* CSS to disable scrolling */
+        .no-scroll {
+            overflow: hidden; /* Disable scrolling */
+            height: 100%; /* Prevent body height change */
+        }
+    </style>
 </head>
-<body class="min-h-screen flex flex-col bg-gray-900 text-gray-900">
+<body class="min-h-screen flex flex-col bg-gray-900 text-gray-900 no-scroll"> <!-- Apply no-scroll class here -->
 
-    <!-- Header -->
-    <header class="bg-blue-900 text-white py-4 shadow-md">
-        <div class="container mx-auto flex justify-between items-center px-4">
-            <h1 class="text-2xl font-verdana">Site Sense AI</h1>
-        </div>
-    </header>
+    <!-- Header REMOVED FOR SMOOTH LOOK IN IFRAME-->
+<!--    <header class="bg-blue-900 text-white py-4 shadow-md">-->
+<!--        <div class="container mx-auto flex justify-between items-center px-4">-->
+<!--            <h1 class="text-2xl font-verdana">Site Sense AI</h1>-->
+<!--        </div>-->
+<!--    </header>-->
 
     <!-- Main Content -->
     <main class="container mx-auto flex-grow py-8 px-4">
