@@ -4,22 +4,23 @@
 
 {% block content %}
 
-<div class="container mx-auto py-8 px-4 h-screen flex flex-col bg-gray-900">
+<div class="container mx-auto py-8 px-4 h-screen flex flex-col">
     <!-- Chat Section (scrollable) -->
-    <div id="chat-container" class="flex-grow overflow-y-auto space-y-6 p-4 border rounded-lg border-gray-700 bg-gray-800">
+    <div id="chat-container" class="flex-grow overflow-y-auto space-y-6 p-4 border rounded-lg">
         <!-- Existing conversation will be appended here dynamically -->
     </div>
 
     <!-- Form Section (fixed at the bottom) -->
-    <form id="chatForm" class="bg-gray-800 shadow-lg rounded-lg p-6 w-full flex items-center space-x-2 mt-4">
+    <form id="chatForm" class="bg-white shadow-lg rounded-lg p-6 w-full">
         {% csrf_token %}
-        <div class="flex-grow">
+        <div class="mb-4">
+            <label for="question" class="block text-gray-700 font-medium mb-2">Enter Question Here:</label>
             <input type="text" id="questionInput" name="question"
                    required
-                   class="w-full border border-gray-600 rounded-lg py-2 px-4 bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200"
-                   placeholder="Ask Emily a question...">
+                   class="w-full border border-gray-300 rounded-lg py-2 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200"
+                   placeholder="Type your question here...">
         </div>
-        <button type="submit" class="bg-orange-600 text-white font-verdana py-2 px-4 rounded-lg hover:bg-blue-500 transition duration-200">
+        <button type="submit" class="w-full bg-blue-600 text-white font-semibold py-2 rounded-lg hover:bg-blue-500 transition duration-200">
             Submit
         </button>
     </form>
@@ -70,9 +71,9 @@
         // Create the bubble itself
         let bubble = document.createElement('p');
         if (type === 'user') {
-            bubble.classList.add('bg-blue-900', 'text-white', 'rounded-lg', 'p-3', 'shadow-md', 'w-auto', 'max-w-lg');  // User message style
+            bubble.classList.add('bg-blue-500', 'text-white', 'rounded-lg', 'p-3', 'shadow-md', 'w-auto', 'max-w-lg');  // User message style
         } else {
-            bubble.classList.add('text-gray-300', 'w-full');  // AI message spans full width, no background
+            bubble.classList.add('text-gray-800', 'w-full');  // AI message spans full width, no background
         }
 
         // If stream is true, display text progressively, otherwise show all at once

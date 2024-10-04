@@ -102,3 +102,5 @@ yarl
 python-whois~=0.9.4
 
 django-cors-headers==4.4.0
+
+Markdown~=3.7
