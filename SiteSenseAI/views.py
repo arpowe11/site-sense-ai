@@ -11,7 +11,6 @@ def home(request) -> HttpResponse:
     return render(request, "SiteSenseAI/index.html", {})
 
 
-
 def emily_ai(request) -> HttpResponse:
     chat_memory = request.session.get('conversation_memory', [])  # NOQA
     site_sense: SiteSense = SiteSense(model="gpt-3.5-turbo", temp=0.7, memory_data=chat_memory)
