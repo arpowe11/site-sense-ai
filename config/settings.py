@@ -134,7 +134,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Used for API purposes or iframe access
 CORS_ALLOWED_ORIGINS = [
-    "https://sunsigndesigns.com",
+    "https://www.sunsigndesigns.com",
 ]
 
 # Allow all subdomains of sunsigndesigns.com
@@ -149,6 +149,7 @@ CORS_ALLOW_METHODS = [
 
 SESSION_COOKIE_SAMESITE = 'None'
 SESSION_COOKIE_SECURE = True
+SESSION_COOKIE_DOMAIN = '.sunsigndesigns.com'
 
 CORS_ALLOW_CREDENTIALS = True
 X_FRAME_OPTIONS = 'SAMEORIGIN'
