@@ -10,7 +10,14 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
+import os
+
 from pathlib import Path
+from dotenv import load_dotenv, find_dotenv
+
+
+# Load the environment vars
+load_dotenv(find_dotenv(), override=True)
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -19,7 +26,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-6n3#i8%d+$_p#zz&ootq=3%5^x%$mw@ttkug9ru**7_62i_f+y'
+SECRET_KEY = os.environ['DJANGO_SECRET_KEY']
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
@@ -49,7 +56,7 @@ MIDDLEWARE = [
     # Added for static files, get rid of spaces and comment
     'whitenoise.middleware.WhiteNoiseMiddleware',
 
-    # Trying to integrate into wordpress
+    # Trying to integrate into wordpress via iframe
     'corsheaders.middleware.CorsMiddleware',
 
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -133,23 +140,24 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 # Used for API purposes or iframe access
+
+CORS_ALLOW_CREDENTIALS = True
+X_FRAME_OPTIONS = 'ALLOW-FROM https://www.sunsigndesigns.com'
+
 CORS_ALLOWED_ORIGINS = [
     "https://www.sunsigndesigns.com",
 ]
 
 # Allow all subdomains of sunsigndesigns.com
-CORS_ALLOWED_ORIGIN_REGEXES = [
-    r"^https://(\w+\.)?sunsigndesigns\.com$",
-]
+# CORS_ALLOWED_ORIGIN_REGEXES = [
+#     r"^https://(\w+\.)?sunsigndesigns\.com$",
+# ]
+#
+# CORS_ALLOW_METHODS = [
+#     'GET',
+#     'POST',
+# ]
 
-CORS_ALLOW_METHODS = [
-    'GET',
-    'POST',
-]
-
-SESSION_COOKIE_SAMESITE = 'None'
-SESSION_COOKIE_SECURE = True
-SESSION_COOKIE_DOMAIN = '.sunsigndesigns.com'
-
-CORS_ALLOW_CREDENTIALS = True
-X_FRAME_OPTIONS = 'ALLOW-FROM https://www.sunsigndesigns.com'
+# SESSION_COOKIE_SAMESITE = 'None'
+# SESSION_COOKIE_SECURE = True
+# SESSION_COOKIE_DOMAIN = '.sunsigndesigns.com'
