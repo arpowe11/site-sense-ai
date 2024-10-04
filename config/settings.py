@@ -131,10 +131,20 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# Used for API purposes or iframe access
 
+# Used for API purposes or iframe access
 CORS_ALLOWED_ORIGINS = [
     "https://sunsigndesigns.com",
+]
+
+# Allow all subdomains of sunsigndesigns.com
+CORS_ALLOWED_ORIGIN_REGEXES = [
+    r"^https://(\w+\.)?sunsigndesigns\.com$",
+]
+
+CORS_ALLOW_METHODS = [
+    'GET',
+    'POST',
 ]
 
 CORS_ALLOW_CREDENTIALS = True
