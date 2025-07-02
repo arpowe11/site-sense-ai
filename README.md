@@ -10,6 +10,7 @@
 - 📚 Trained or fine-tuned on web development topics
 - 🛠️ Easy to integrate with web apps or development environments
 
+
 ## 🧰 Tech Stack
 
 - **Python** - Core programming language powering the backend logic
@@ -18,11 +19,22 @@
 - **Postgres SQL** – Used to implement a custom caching layer for performance and cost efficiency
 - **Frontend** - Built with PHP, HTML, CSS, and JavaScript for both the standalone plugin and embeddable widget
 
+
 ## 🛠️ About This Project
 
 This project was originally developed during my **Summer 2024 internship** at **Sun Sign Designs** as part of my senior year at the **University of South Florida (USF)**. It was my **first AI-based application**, and I independently designed, built, and deployed the MVP.
 
 As of now, I continue to maintain and improve SiteSense AI, with the next major goal being a **redesign and enhancement of the frontend user interface** to improve usability and visual polish.
 
+
 ## 🧪 Demo
 To see the first version demo of the AI visit [Site Sense AI](https://sunsigndesigns.com/sitesense-ai/)
+
+
+## 🔒 License
+
+This project is released under the **SiteSense AI Viewing License (SSAI-VL)**.
+
+You are free to view and study the code for personal, non-commercial use only. Modification, redistribution, or commercial use is **not permitted** without explicit written permission from the author.
+
+See the [LICENSE](LICENSE) file for full terms.
