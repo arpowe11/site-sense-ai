@@ -17,13 +17,13 @@ Usage:
 Notes:
     - This tool does not retrieve data. For lookups, use CacheLookupTool.
     - Useful for persisting responses to improve agent efficiency and reduce cost.
-
-TODO:
-    - Implement the connection to the caching service in `_run`.
 """
 
 
 from langchain.tools import Tool
+from ..services.chat_cache import SiteSenseCache
+
+import os
 
 
 class CacheUpdateTool(Tool):
@@ -37,9 +37,11 @@ class CacheUpdateTool(Tool):
     def run(self, info: tuple, *args, **kwargs) -> str:
         prompt = info[0]
         llm_response = info[1]
+        cache = SiteSenseCache(os.getenv("TEST_DB_CACHE"))
 
         try:
             print("[+] Updating the cache with {prompt} and {ai_response}".format(prompt=prompt, ai_response=llm_response))
+            cache.update(prompt=prompt, llm_response=llm_response)
         except Exception as e:
             return f"A problem occurred while updating the cache: {e}"
 

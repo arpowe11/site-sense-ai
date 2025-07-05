@@ -18,14 +18,13 @@ Usage:
 
 Note:
     - This tool is for lookup only. Cache updates are be handled separately.
-
-TODO:
-    - Implement the connection to the caching service in `_run`.
-    - Optionally handle formatting or serialization of prompt keys.
 """
 
 
 from langchain.tools import Tool
+from ..services.chat_cache import SiteSenseCache
+
+import os
 
 
 class CacheLookupTool(Tool):
@@ -36,10 +35,11 @@ class CacheLookupTool(Tool):
             func=self._run
         )
 
-    def _run(self, question: str, *args, **kwargs) -> str:
+    def _run(self, prompt: str, *args, **kwargs) -> str | None:
+        cache = SiteSenseCache(os.getenv("TEST_DB_CACHE"))
         try:
-            # TODO: This is where you need to call the cache service to look up
-            print("[+] Doing lookup for {question}".format(question=question))
+            print("[+] Doing lookup for {question}".format(question=prompt))
+            return cache.lookup(prompt=prompt) or None
         except Exception as e:
             return f"A problem occurred: {e}"
 

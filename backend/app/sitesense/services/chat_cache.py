@@ -31,22 +31,22 @@ class SiteSenseCache(BaseCache):
             return str(prompt)
 
     def lookup(self, prompt: str) -> str | None:
-        prompt_str = self.serialize_prompt(prompt)
-        print(f"[+] {prompt_str}")
+        #prompt_str = self.serialize_prompt(prompt)
+        #print(f"[+] {prompt_str}")
         with self.conn.cursor() as cur:
-            cur.execute("SELECT llm_response FROM sitesense_cache WHERE prompt = %s", (prompt_str,))
+            cur.execute("SELECT llm_response FROM sitesense_cache WHERE prompt = %s", (prompt,))
             row = cur.fetchone()
             return row[0] if row else None
 
     def update(self, prompt: str, llm_response: str) -> None:
-        prompt_str = self.serialize_prompt(prompt)
+        #prompt_str = self.serialize_prompt(prompt)
         with self.conn.cursor() as cur:
             cur.execute("""
                 INSERT INTO sitesense_cache (prompt, llm_response)
                 VALUES (%s, %s)
                 ON CONFLICT (prompt) DO UPDATE
                 SET llm_response = EXCLUDED.llm_response;
-            """, (prompt_str, llm_response))
+            """, (prompt, llm_response))
 
     def clear(self) -> None:
         with self.conn.cursor() as cur:
