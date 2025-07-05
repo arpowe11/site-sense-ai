@@ -10,7 +10,7 @@ Dependencies:
     - whois_lookup
 
 Author: Alexander Powell
-Version: v1.3
+Version: v1.4
 Date: 2025-06-16
 """
 
@@ -18,16 +18,11 @@ from dotenv import load_dotenv, find_dotenv
 from typing import Any, Dict
 
 from .sitesense.services.chat_memory import SiteSenseAIMemory
-from .sitesense.services.chat_cache import SiteSenseCache
-from .sitesense.tools.whois_lookup import domain_search
+from .sitesense.tools import *
 
-from langchain.tools import Tool
 from langchain_openai import ChatOpenAI
 from langchain.agents import create_react_agent, AgentExecutor
 from langchain.prompts import PromptTemplate
-from langchain.globals import set_llm_cache
-
-import os
 
 
 class SiteSenseAI:
@@ -38,10 +33,7 @@ class SiteSenseAI:
             raise ValueError("Config file must be provided")
 
         if model is None:
-            model = config["AI_MODEL"]
-
-        sitesense_cache_url = os.getenv("SITESENSE_CACHE_DB")
-        set_llm_cache(SiteSenseCache(sitesense_cache_url))
+            model: str = config["AI_MODEL"]
 
         self.agent_emily: ChatOpenAI = ChatOpenAI(model=model, temperature=temp)  # NOQA
         self.chat_memory: SiteSenseAIMemory = SiteSenseAIMemory()
@@ -49,13 +41,6 @@ class SiteSenseAI:
         self.prompt_template: Any = config["TEMPLATES_DIR"]
 
     def _get_prompt_template(self) -> PromptTemplate:  # NOQA
-        """
-        Gets the ReAct prompt template from a file and creates
-        a prompt template for the AI Agent.
-
-        :return prompt:
-        """
-
         with open(self.prompt_template) as template_file:
             template = template_file.read()
             template_file.close()
@@ -67,49 +52,16 @@ class SiteSenseAI:
 
         return prompt
 
-    def _get_whois_tool(self, domain_name: str) -> Any:  # NOQA
-        """
-        Gets the results of a WHOIS lookup from an external function.
 
-        :param domain_name:
-        :return whois_lookup:
-        """
-        return domain_search(domain_name)
-
-    def _get_memory(self):
-        """
-        Gets the chat memory.
-
-        :return:
-        """
+    def _get_memory(self) -> SiteSenseAIMemory:
         return self.chat_memory
 
     def _update_memory(self, context: str):
-        """
-        Updates the chat memory.
-
-        :param context:
-        :return:
-        """
         self.chat_memory.append(context)
 
     def _create_agent(self):
-        """
-        Creates the ReAct agent and implements all the
-        tools the agent can use.
-
-        :return:
-        """
-
         prompt = self._get_prompt_template()
-
-        domain_tool = Tool(
-            name="WHOIS",
-            func=self._get_whois_tool,
-            description="Find the availability of a domain name"
-        )
-
-        tools = [domain_tool]
+        tools: list = [cache_lookup_tool, domain_search_tool]
 
         agent = create_react_agent(self.agent_emily, tools, prompt)
         self.agent_executor = AgentExecutor(
@@ -130,6 +82,8 @@ class SiteSenseAI:
         """
 
         self._create_agent()
+
+        # FIXME: Memory does not work, needs debugging and to be fixed or reimplemented
         memory_context = self.chat_memory.get_chat_history()
 
         # Get the response from the ReAct Agent
@@ -138,8 +92,14 @@ class SiteSenseAI:
             "memory_context": memory_context,
         })
 
+        # Cache the ai_response
+        cache_update_tool.run(info=(ai_response["input"], ai_response["output"]))
+
         # Create the context for the memory and update the chat memory
         context: str = f"Human: {user_input}\nAI: {ai_response}"
+        # print("[+] Input:", ai_response["input"])
+        # print("[+] Output:", ai_response["output"])
+
         self.chat_memory.append(context)
 
         return ai_response

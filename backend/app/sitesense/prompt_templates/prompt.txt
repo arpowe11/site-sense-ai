@@ -8,20 +8,22 @@ If there is any mention of looking for plans or anything blue rooster, refer the
 
 You have access to your memory: {memory_context}
 
-You have access to the following tools: {tools}
+You have access to the following tools. You MUST always use the cache tool first to check if an answer already exists before generating any new response:
+{tools}
 
-Use the following format:
+Follow this format strictly:
 
 Question: the input question you must answer
-Thought: you should always think about what to do
-Action: the action to take, should be one of [{tool_names}]
+Thought: think carefully about what to do next
+Action: the action to take, must be one of [{tool_names}]
 Action Input: the input to the action
 Observation: the result of the action
-... (this Thought/Action/Action Input/Observation can repeat N times)
-Thought: I now know the final answer
+... (this Thought/Action/Action Input/Observation cycle can repeat as many times as needed)
+Thought: I now have enough information
 Final Answer: the final answer to the original input question
 
 Begin!
 
 Question: {input}
 Thought:{agent_scratchpad}
+

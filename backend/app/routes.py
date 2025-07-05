@@ -1,11 +1,13 @@
 from typing import Any
 from flask import Blueprint, request, jsonify, current_app
+from flask_cors import CORS
 from .agent_logic import SiteSenseAI
 
 import markdown
 
 
 bp: Blueprint = Blueprint("main", __name__)
+CORS(app=bp)
 
 @bp.route("/chat", methods=["POST"])
 def get_response():
