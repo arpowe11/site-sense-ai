@@ -8,10 +8,14 @@ import markdown
 
 bp: Blueprint = Blueprint("main", __name__)
 CORS(app=bp)
+agent_emily = None
 
 @bp.route("/chat", methods=["POST"])
 def get_response():
-    agent_emily: SiteSenseAI = SiteSenseAI(temp=0.8, config=current_app.config)
+    # Lazy initialization with global var to instantiate the llm once but allowing current_app in request
+    global agent_emily
+    if agent_emily is None:
+        agent_emily = SiteSenseAI(temp=0.8, config=current_app.config)
 
     try:
         data: Any = request.json

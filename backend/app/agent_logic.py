@@ -11,13 +11,13 @@ Dependencies:
 
 Author: Alexander Powell
 Version: v1.4
-Date: 2025-06-16
+Date: 2025-07-05
 """
 
 from dotenv import load_dotenv, find_dotenv
 from typing import Any, Dict
 
-from .sitesense.services.chat_memory import SiteSenseAIMemory
+from .sitesense.services.chat_memory import SiteSenseConversationMemory
 from .sitesense.tools import *
 
 from langchain_openai import ChatOpenAI
@@ -36,7 +36,7 @@ class SiteSenseAI:
             model: str = config["AI_MODEL"]
 
         self.agent_emily: ChatOpenAI = ChatOpenAI(model=model, temperature=temp)  # NOQA
-        self.chat_memory: SiteSenseAIMemory = SiteSenseAIMemory()
+        self.chat_memory: SiteSenseConversationMemory = SiteSenseConversationMemory()
         self.agent_executor: AgentExecutor
         self.prompt_template: Any = config["TEMPLATES_DIR"]
 
@@ -52,13 +52,6 @@ class SiteSenseAI:
 
         return prompt
 
-
-    def _get_memory(self) -> SiteSenseAIMemory:
-        return self.chat_memory
-
-    def _update_memory(self, context: str):
-        self.chat_memory.append(context)
-
     def _create_agent(self):
         prompt = self._get_prompt_template()
         tools: list = [cache_lookup_tool, domain_search_tool]
@@ -72,19 +65,20 @@ class SiteSenseAI:
             max_iterations=10
         )
 
-
     def engage(self, user_input: str) -> Dict[str, Any]:
         """
-        Entry point to engage with the AI Agent and ask it questions.
+        Engage with the AI agent by passing in a user query, retrieving context from memory,
+        invoking the ReAct agent, caching the response, and updating the memory.
 
-        :param user_input:
-        :return ai_response:
+        Parameters:
+            user_input (str): The user's question or prompt to pass to the AI agent.
+
+        Returns:
+            Dict[str, Any]: The full response from the agent, including any intermediate steps and output.
         """
 
         self._create_agent()
-
-        # FIXME: Memory does not work, needs debugging and to be fixed or reimplemented
-        memory_context = self.chat_memory.get_chat_history()
+        memory_context = self.chat_memory.get_context()
 
         # Get the response from the ReAct Agent
         ai_response = self.agent_executor.invoke({
@@ -92,14 +86,13 @@ class SiteSenseAI:
             "memory_context": memory_context,
         })
 
+        input_response = ai_response["input"]
+        output_response = ai_response["output"]
+
         # Cache the ai_response
-        cache_update_tool.run(info=(ai_response["input"], ai_response["output"]))
+        cache_update_tool.run(info=(input_response, output_response))
 
-        # Create the context for the memory and update the chat memory
-        context: str = f"Human: {user_input}\nAI: {ai_response}"
-        # print("[+] Input:", ai_response["input"])
-        # print("[+] Output:", ai_response["output"])
-
-        self.chat_memory.append(context)
+        # Update the conversation memory
+        self.chat_memory.append(user_input=input_response, ai_response=output_response)
 
         return ai_response
