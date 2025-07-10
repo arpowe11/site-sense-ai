@@ -33,3 +33,4 @@ def get_response():
 
     except Exception as ex:
         return jsonify({"error": f"Something went wrong: {str(ex)}"}), 400
+

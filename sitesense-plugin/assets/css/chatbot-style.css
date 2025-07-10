@@ -1,3 +1,30 @@
+/*
+====================================================================
+Custom Chat Widget Styles
+====================================================================
+
+NOTE: The use of `!important` throughout this stylesheet is intentional.
+
+REASON:
+This chat widget is designed to be embedded within WordPress sites.
+Many WordPress themes apply aggressive or global CSS rules that can 
+override plugin styles, especially when using shared class names 
+(e.g., .chat-container, .button, etc.).
+
+To ensure visual consistency and prevent the widget from being 
+visually broken by conflicting theme styles, `!important` is used 
+on all key style declarations. This guarantees that the intended 
+design of the chat interface remains intact across different themes 
+and page builders (Elementor, Divi, WPBakery, etc.).
+
+If this sytlesheet is being used outside of WordPress or in an environment 
+where you control the global CSS, you may safely remove the 
+`!important` declarations.
+
+====================================================================
+*/
+
+
 .chat-container {
     max-width: 100% !important;
     min-width: 280px !important;
@@ -12,7 +39,7 @@
 }
 
 .chat-header {
-    background-color: #2f4f6f !important;
+    background-color: rgb(34,48,94) !important;
     color: white !important;
     padding: 15px !important;
     font-weight: bold !important;
@@ -35,7 +62,7 @@
 }
 
 .chat-message.user {
-    background-color: #d4edda !important;
+    background-color: rgb(127, 141, 195) !important;
     align-self: flex-end !important;
 }
 
@@ -79,7 +106,7 @@
 }
 
 .chat-input-area button {
-    background-color: #2f4f6f !important;
+    background-color: rgb(221,167,63) !important;
     color: white !important;
     border: none !important;
     border-radius: 5px !important;
@@ -90,5 +117,5 @@
 }
 
 .chat-input-area button:hover {
-    background-color: #1c3a52 !important;
+    background-color: rgb(134, 100, 38) !important;
 }
