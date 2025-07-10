@@ -4,14 +4,14 @@ defined('ABSPATH') or die('No script kiddies please!');
 function sitesense_ai_enqueue_scripts() {
     wp_enqueue_style(
         'sitesense-ai-style',
-        plugin_dir_url(__FILE__) . '../css/chatbot-style.css',
+        plugin_dir_url(__FILE__) . '../assets/css/chatbot-style.css',
         array(),
         '1.0'
     );
 
     wp_enqueue_script(
         'sitesense-ai-js',
-        plugin_dir_url(__FILE__) . '../js/chatbot-script.js',
+        plugin_dir_url(__FILE__) . '../assets/js/chatbot-script.js',
         array('jquery'),
         '1.0',
         true

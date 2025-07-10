@@ -1,10 +1,10 @@
-<div class="ai-outer-box">
-    <div id="ai-chat-box" defer></div>
-</div>
-
-<div class="ai-input-container">
-    <form id="ai-chat-form" onsubmit="handleFormSubmit(event)" action="javascript:void(0);">
-        <textarea class="emily_chat" id="ai-message" name="message" placeholder="Ask Emily a question!" required></textarea>
-        <button id="ai-submitButton" class="ai-submit-button" type="submit">Send</button>
-    </form>
+<div class="chat-container">
+  <div class="chat-header">Agent Emily</div>
+  <div class="chat-body" id="chat-body">
+    <div class="chat-message">👋 Hello! How can I help you today?</div>
+  </div>
+  <div class="chat-input-area">
+    <input type="text" id="chat-input" placeholder="Type your message..." />
+    <button onclick="submitMessage()">Send</button>
+  </div>
 </div>
