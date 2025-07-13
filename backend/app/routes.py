@@ -1,17 +1,18 @@
 from typing import Any
 from flask import Blueprint, request, jsonify, current_app
-from flask_cors import CORS
 from .agent_logic import SiteSenseAI
 
 import markdown
 
 
 bp: Blueprint = Blueprint("main", __name__)
-CORS(app=bp)
 agent_emily = None
 
-@bp.route("/chat", methods=["POST"])
+@bp.route("/chat", methods=["POST", "OPTIONS"])
 def get_response():
+    if request.method == "OPTIONS":
+        return "", 204
+
     # Lazy initialization with global var to instantiate the llm once but allowing current_app in request
     global agent_emily
     if agent_emily is None:

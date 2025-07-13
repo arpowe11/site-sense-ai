@@ -4,14 +4,14 @@ defined('ABSPATH') or die('No script kiddies please!');
 function sitesense_ai_enqueue_scripts() {
     wp_enqueue_style(
         'sitesense-ai-style',
-        plugin_dir_url(__FILE__) . '../assets/css/chatbot-style.css',
+        plugin_dir_url(__FILE__) . '../assets/css/sitesense-styles.css',
         array(),
         '1.0'
     );
 
     wp_enqueue_script(
         'sitesense-ai-js',
-        plugin_dir_url(__FILE__) . '../assets/js/chatbot-script.js',
+        plugin_dir_url(__FILE__) . '../assets/js/sitesense-script.js',
         array('jquery'),
         '1.0',
         true
@@ -37,7 +37,7 @@ function sitesense_ai_enqueue_scripts() {
 
     // Pass the REST API endpoint URL or to JS
     wp_localize_script('sitesense-ai-js', 'sitesenseAI', array(
-        'apiUrl' => 'http://127.0.0.1:5000/chat' // apiUrl protected for security
+        'apiUrl' => 'http://sitesense-api-env.eba-efrmddax.us-east-1.elasticbeanstalk.com/chat'
     ));
 }
 
