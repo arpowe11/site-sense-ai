@@ -28,7 +28,7 @@ As of now, I continue to maintain and improve SiteSense AI, with the next major 
 
 
 ## 🧪 Demo
-To see the first version demo of the AI visit [Site Sense AI](https://sunsigndesigns.com/sitesense-ai/)
+To see the most recent version demo of the AI visit [Site Sense AI](https://sunsigndesigns.com/sitesense-ai/)
 
 
 ## 🔒 License
