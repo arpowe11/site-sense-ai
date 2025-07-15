@@ -1,6 +1,6 @@
 # SiteSense AI 🧠🌐
 
-**SiteSense AI** is an AI-powered assistant designed to answer web development and site-related questions. It provides developers and learners with fast, accurate, and contextual responses across both frontend and backend technologies. Powered by **OpenAI**, the same technology behind ChatGPT, SiteSense AI delivers high-quality answers, though like all AI models, it may occasionally generate incorrect or incomplete information.
+**SiteSense AI** is an AI-powered assistant designed to answer web development and site-related questions. It provides developers and learners with fast, accurate, and contextual responses across both frontend and backend technologies. Powered by **OpenAI**, the same technology behind ChatGPT, SiteSense AI delivers high-quality answers, though like all AI models, it may occasionally generate incorrect or incomplete information. To explore how the AI works, including the API endpoint it uses to generate responses, check out the [backend](./backend) folder in the project repository.
 
 
 ## 🚀 Features
