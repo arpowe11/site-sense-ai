@@ -27,23 +27,7 @@ import os
 
 
 class CacheUpdateTool(Tool):
-    def __init__(self):
-        super().__init__(
-            name="Cache Update Tool",
-            description="Invokes the update function for the cacheing service",
-            func=self.run
-        )
-
-    def run(self, info: tuple, *args, **kwargs) -> str:
-        prompt = info[0]
-        llm_response = info[1]
-        cache = SiteSenseCache(os.getenv("TEST_DB_CACHE"))
-
-        try:
-            print("[+] Updating the cache with {prompt} and {ai_response}".format(prompt=prompt, ai_response=llm_response))
-            cache.update(prompt=prompt, llm_response=llm_response)
-        except Exception as e:
-            return f"A problem occurred while updating the cache: {e}"
+    ...
 
 
 cache_update_tool = CacheUpdateTool()

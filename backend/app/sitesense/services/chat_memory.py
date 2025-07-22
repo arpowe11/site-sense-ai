@@ -51,3 +51,4 @@ class SiteSenseConversationMemory:
 
     def get_context(self):
         return "\n".join(self.history)
+    

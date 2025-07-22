@@ -28,20 +28,7 @@ import os
 
 
 class CacheLookupTool(Tool):
-    def __init__(self):
-        super().__init__(
-            name="Cache Lookup Tool",
-            description="Cache tool that you will use to cache human inputs and ai responses",
-            func=self._run
-        )
-
-    def _run(self, prompt: str, *args, **kwargs) -> str | None:
-        cache = SiteSenseCache(os.getenv("TEST_DB_CACHE"))
-        try:
-            print("[+] Doing lookup for {question}".format(question=prompt))
-            return cache.lookup(prompt=prompt) or None
-        except Exception as e:
-            return f"A problem occurred: {e}"
+    ...
 
 
 cache_lookup_tool = CacheLookupTool()

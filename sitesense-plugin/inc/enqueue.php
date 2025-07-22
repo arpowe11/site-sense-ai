@@ -37,7 +37,7 @@ function sitesense_ai_enqueue_scripts() {
 
     // Pass the REST API endpoint URL or to JS
     wp_localize_script('sitesense-ai-js', 'sitesenseAI', array(
-        'apiUrl' => 'http://sitesense-api-env.eba-efrmddax.us-east-1.elasticbeanstalk.com/chat'
+        'apiUrl' => ''
     ));
 }
 

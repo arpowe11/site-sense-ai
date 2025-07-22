@@ -21,19 +21,7 @@ import whois
 
 
 class DomainSearchTool(Tool):
-    def __init__(self):
-        super().__init__(
-            name="WHOIS",
-            description="Find the availability of a domain name",
-            func=self._run
-        )
-
-    def _run(self, domain: str, *args, **kwargs) -> str:
-        try:
-            info = whois.whois(domain)
-            return str(info)
-        except Exception as e:
-            return f"WHOIS lookup failed: {e}"
+    ...
 
 
 domain_search_tool = DomainSearchTool()
